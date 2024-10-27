@@ -1,19 +1,17 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class BarrelControl : MonoBehaviour
 {
     float angle = 0f;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    [Header("Inscribed")]
+    public GameObject projectilePrefab;
+    public Transform barrelEnd; // Assign the end of the barrel in the Unity Editor
+    public float projectileSpeed = 40;
 
-    // Update is called once per frame
     void Update()
     {
         Vector3 mousePos2D = Input.mousePosition;
@@ -23,11 +21,50 @@ public class BarrelControl : MonoBehaviour
         Vector3 direction = mousePos3D - transform.position;
         angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
 
-        //angle += .1f;
-        if (Mathf.Abs(angle-90) < 85)
+        if (Mathf.Abs(angle - 90) < 85)
         {
-            transform.rotation = Quaternion.Euler(0, 0, (angle - 90));
+            transform.rotation = Quaternion.Euler(0, 0, angle - 90);
         }
-        
+
+        //if (Input.GetKeyDown(KeyCode.Space))
+        //{
+        //    TempFire();
+        //}
+
+        if (Input.GetKeyDown(KeyCode.S))
+        {
+            TempFire(1);
+        }
+        else if (Input.GetKeyDown(KeyCode.D))
+        {
+            TempFire(2);
+        }
+        else if (Input.GetKeyDown(KeyCode.F))
+        {
+            TempFire(3);
+        }
+    }
+
+    void TempFire(int bulletValue)
+    {
+        // Instantiate the projectile at the barrel end position and orientation
+        GameObject projGO = Instantiate(projectilePrefab, barrelEnd.position, barrelEnd.rotation);
+
+        // Set the projectile's velocity
+        Rigidbody rigidRB = projGO.GetComponent<Rigidbody>();
+        rigidRB.velocity = barrelEnd.up * projectileSpeed;
+
+        Bullet bullet = projGO.GetComponent<Bullet>();
+        if (bullet != null)
+        {
+            bullet.bulletValue = bulletValue;
+        }
+
+        // Set the bullet's text to the appropriate value
+        TextMeshPro textComponent = projGO.GetComponentInChildren<TextMeshPro>();
+        if (textComponent != null)
+        {
+            textComponent.text = bulletValue.ToString();
+        }
     }
 }

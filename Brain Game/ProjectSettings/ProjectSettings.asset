@@ -815,11 +815,11 @@ PlayerSettings:
   apiCompatibilityLevel: 6
   activeInputHandler: 0
   windowsGamepadBackendHint: 0
-  cloudProjectId: 
+  cloudProjectId: fe9bcd27-bc1a-4150-ace9-95d26f930838
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
-  projectName: 
-  organizationId: 
+  projectName: Brain Game
+  organizationId: stellacraig
   cloudEnabled: 0
   legacyClampBlendShapeWeights: 0
   playerDataPath: 
