@@ -1,7 +1,7 @@
 using UnityEngine;
 using TMPro;
 
-public class CrateFall : MonoBehaviour
+public class PracticeCrateFall : MonoBehaviour
 {
     private float swayAmount;
     private float swaySpeed;
@@ -103,12 +103,12 @@ public class CrateFall : MonoBehaviour
     private void AwardPoints()
     {
         // Implement score addition logic here
-        ScoreManager.Instance.AddPoints(initialCrateValue); // Award points equal to the crate's value
+        PracticeScore.Instance.AddPoints(initialCrateValue); // Award points equal to the crate's value
     }
 
     private void DeductPoints()
     {
         // Implement score deduction logic here
-        ScoreManager.Instance.DeductPoints(Mathf.Abs(initialCrateValue)); // Deduct points based on crate value
+        PracticeScore.Instance.DeductPoints(Mathf.Abs(initialCrateValue)); // Deduct points based on crate value
     }
 }

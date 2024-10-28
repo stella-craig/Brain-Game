@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-public class BarrelControl : MonoBehaviour
+public class PracticeBarrelControl : MonoBehaviour
 {
     float angle = 0f;
 
@@ -11,9 +11,6 @@ public class BarrelControl : MonoBehaviour
     public GameObject projectilePrefab;
     public Transform barrelEnd; // Assign the end of the barrel in the Unity Editor
     public float projectileSpeed = 40;
-    public TextMeshProUGUI ball1;
-    public TextMeshProUGUI ball2;
-    public TextMeshProUGUI ball3;
 
     void Update()
     {
@@ -42,33 +39,15 @@ public class BarrelControl : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.S))
         {
-            int currentValue = int.Parse(ball1.text);
-            if (currentValue > 0)
-            {
-                ball1.text = (currentValue - 1).ToString();
-                TempFire(1);
-            }            
-            else { return; }
+            TempFire(1);
         }
         else if (Input.GetKeyDown(KeyCode.D))
         {
-            int currentValue = int.Parse(ball2.text);
-            if (currentValue > 0)
-            {
-                ball2.text = (currentValue - 1).ToString();
-                TempFire(2);
-            }
-            else { return; }
+            TempFire(2);
         }
         else if (Input.GetKeyDown(KeyCode.F))
         {
-            int currentValue = int.Parse(ball3.text);
-            if (currentValue > 0)
-            {
-                ball3.text = (currentValue - 1).ToString();
-                TempFire(3);
-            }
-            else { return; }
+            TempFire(3);
         }
     }
 
@@ -81,7 +60,7 @@ public class BarrelControl : MonoBehaviour
         Rigidbody rigidRB = projGO.GetComponent<Rigidbody>();
         rigidRB.velocity = barrelEnd.up * projectileSpeed;
 
-        Bullet bullet = projGO.GetComponent<Bullet>();
+        PracticeBullet bullet = projGO.GetComponent<PracticeBullet>();
         if (bullet != null)
         {
             bullet.bulletValue = bulletValue;
@@ -93,12 +72,5 @@ public class BarrelControl : MonoBehaviour
         {
             textComponent.text = bulletValue.ToString();
         }
-    }
-
-    public void ResetAmmo()
-    {
-        ball1.text = 50.ToString();
-        ball2.text = 50.ToString();
-        ball3.text = 50.ToString();
     }
 }

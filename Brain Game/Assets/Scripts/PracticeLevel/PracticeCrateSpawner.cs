@@ -2,7 +2,7 @@ using System.Collections;
 using UnityEngine;
 using TMPro;
 
-public class CrateSpawner : MonoBehaviour
+public class PracticeCrateSpawner : MonoBehaviour
 {
     [Header("Inscribed")]
     public GameObject cratePrefab;
@@ -16,30 +16,24 @@ public class CrateSpawner : MonoBehaviour
 
     void Start()
     {
-        camHeight = Camera.main.orthographicSize * 2f;
+        camHeight = Camera.main.orthographicSize;
         camWidth = camHeight * Camera.main.aspect;
+        StartCoroutine(SpawnCrates());
     }
 
-    public IEnumerator SpawnCrates(int crateCount)
+    IEnumerator SpawnCrates()
     {
-        for (int i = 0; i < crateCount; i++)
+        while (true)
         {
             SpawnCrate();
             yield return new WaitForSeconds(spawnInterval);
         }
     }
 
-    public bool AreAllCratesDestroyed()
+    void SpawnCrate()
     {
-        return GameObject.FindGameObjectsWithTag("Crate").Length == 0;
-    }
-
-
-    public void SpawnCrate()
-    {
-        Debug.Log("SpawnCrate called at game start", this);
-        float xPosition = Random.Range(-camWidth/2, camWidth/2);
-        Vector3 spawnPos = new Vector3(xPosition, (camHeight/2) + 1, 0);
+        float xPosition = Random.Range(-camWidth, camWidth);
+        Vector3 spawnPos = new Vector3(xPosition, camHeight + 1, 0);
 
         GameObject crate = Instantiate(cratePrefab, spawnPos, Quaternion.identity);
         crate.AddComponent<BoundsCheck>();
@@ -47,11 +41,11 @@ public class CrateSpawner : MonoBehaviour
         // Generate and set a random crate value between 1 and maxCrateValue
         int crateValue = Random.Range(1, maxCrateValue + 1);
 
-        // Call Init on CrateFall with the crate's value
-        CrateFall crateFall = crate.GetComponent<CrateFall>();
-        if (crateFall != null)
+        // Call Init on PracticePracticeCrateFall with the crate's value
+        PracticeCrateFall PracticeCrateFall = crate.GetComponent<PracticeCrateFall>();
+        if (PracticeCrateFall != null)
         {
-            crateFall.Init(swayAmount, swaySpeed, fallSpeed, crateValue); // Pass crateValue to Init
+            PracticeCrateFall.Init(swayAmount, swaySpeed, fallSpeed, crateValue); // Pass crateValue to Init
         }
     }
 
