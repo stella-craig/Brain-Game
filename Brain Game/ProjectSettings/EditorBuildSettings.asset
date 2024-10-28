@@ -17,4 +17,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/HowToPlay.unity
     guid: 90415aafee9344847ba2ab1612e2ce41
+  - enabled: 1
+    path: Assets/Scenes/EndScreen.unity
+    guid: 505a3a71c20f7ee4f854074a1d0571db
+  - enabled: 1
+    path: Assets/Scenes/_PracticeLevel.unity
+    guid: bfcfd7e38c9dce146907c03aab9e1e26
   m_configObjects: {}

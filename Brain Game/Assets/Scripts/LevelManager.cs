@@ -1,18 +1,26 @@
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
+using UnityEngine.SceneManagement;
+
 
 public class LevelManager : MonoBehaviour
 {
     public CrateSpawner crateSpawner;          // Reference to the CrateSpawner to control crate spawning
     public CountdownTimer countdownTimer;      // Reference to the CountdownTimer for level time limits
     public BarrelControl barrelControl;        // Reference to BarrelControl to reset ammo
+    public ScoreManager scoreManager;
 
     public TextMeshProUGUI levelText;          // UI to display the current level
     public TextMeshProUGUI boxesRemainingText; // UI to display boxes left
 
+    public Slider progressBar;
+
+    private int currentLevel = 1;
     private int currentLevelIndex = 0;         // Current level index (starting from level 0)
     private int boxesRemaining = 0;
     private bool levelActive = false;          // Is the current level active?
+
 
     // Levels: specify the number of crates and time allowed (in seconds)
     private int[] levelCrates = { 5, 7, 10 };  // Number of crates for each level
@@ -20,12 +28,16 @@ public class LevelManager : MonoBehaviour
 
     void Start()
     {
+        UpdateLevelText();
         StartLevel(currentLevelIndex);
     }
 
     // Start the specified level
     public void StartLevel(int levelIndex)
     {
+        currentLevel = levelIndex + 1;
+        UpdateLevelText();
+
         if (levelIndex < 0 || levelIndex >= levelCrates.Length)
         {
             Debug.LogError("Invalid level index");
@@ -48,9 +60,10 @@ public class LevelManager : MonoBehaviour
         boxesRemaining = levelCrates[levelIndex];
         UpdateBoxesRemainingText();
 
+        UpdateProgressBar();
 
         // Start spawning crates for the current level
-        StartCoroutine(crateSpawner.SpawnCrates(levelCrates[levelIndex]));
+        StartCoroutine(crateSpawner.SpawnCrates());
 
         // Set and start the countdown timer
         countdownTimer.SetTime(levelTimes[levelIndex]);
@@ -62,10 +75,6 @@ public class LevelManager : MonoBehaviour
         if (levelActive && countdownTimer.IsTimeUp())
         {
             LevelFailed();
-        }
-        else if (levelActive && crateSpawner.AreAllCratesDestroyed())
-        {
-            LevelCompleted();
         }
     }
 
@@ -82,7 +91,9 @@ public class LevelManager : MonoBehaviour
         }
         else
         {
+            ScoreManager.Instance.SaveScore();
             Debug.Log("Congratulations! You've completed all levels.");
+            SceneManager.LoadScene("EndScreen");
             // Optionally, reset to the first level or display a "game completed" message
             // StartLevel(0);
         }
@@ -110,7 +121,7 @@ public class LevelManager : MonoBehaviour
     {
         if (boxesRemainingText != null)
         {
-            boxesRemainingText.text = "Boxes Left: " + boxesRemaining;
+            boxesRemainingText.text = "x" + boxesRemaining;
         }
     }
 
@@ -120,11 +131,29 @@ public class LevelManager : MonoBehaviour
         {
             boxesRemaining--;
             UpdateBoxesRemainingText();
+            UpdateProgressBar();
 
             if (boxesRemaining <= 0)
             {
                 LevelCompleted();
             }
+        }
+    }
+
+    private void UpdateLevelText()
+    {
+        if (levelText != null)
+        {
+            levelText.text = "Level " + currentLevel;
+        }
+    }
+
+    private void UpdateProgressBar()
+    {
+        if (progressBar != null)
+        {
+            float progress = 1f - ((float)boxesRemaining / levelCrates[currentLevelIndex]);
+            progressBar.value = progress; // Update the slider based on progress
         }
     }
 }

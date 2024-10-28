@@ -3,6 +3,8 @@ using TMPro;
 
 public class CrateFall : MonoBehaviour
 {
+    public LevelManager levelManager;
+
     private float swayAmount;
     private float swaySpeed;
     private float fallSpeed;
@@ -11,7 +13,18 @@ public class CrateFall : MonoBehaviour
     private int crateValue;
     private int initialCrateValue; // store the original value
 
+    
     private TextMeshPro textComponent;
+
+    void Start()
+    {
+        levelManager = FindObjectOfType<LevelManager>();
+        if (levelManager == null)
+        {
+            Debug.LogError("LevelManager not found in scene. Make sure it exists in the Hierarchy.");
+        }
+    }
+
 
     // Initialize crate with its value and other properties
     public void Init(float swayAmount, float swaySpeed, float fallSpeed, int initialCrateValue)
@@ -55,37 +68,39 @@ public class CrateFall : MonoBehaviour
     // Handle the crate value being affected by a bullet
     public void SubtractValue(int bulletValue)
     {
-        //Debug.Log($"Crate initial value: {crateValue}, Bullet value: {bulletValue}"); // Log initial values
+        // Check if levelManager or textComponent is null
+        if (levelManager == null) Debug.LogError("levelManager is null in CrateFall");
+        if (textComponent == null) Debug.LogError("textComponent is null in CrateFall");
 
-        crateValue -= bulletValue; // Subtract the bullet's value
+        crateValue -= bulletValue;
 
-        // Log the updated crate value after subtraction
-        //Debug.Log($"Updated crate value after subtraction: {crateValue}");
-
-        // Update text display
         if (textComponent != null)
         {
             textComponent.text = crateValue.ToString();
         }
 
-        // Check for destruction conditions
         if (crateValue == 0)
         {
-            //Debug.Log("Crate value is zero, awarding points and destroying crate.");
             AwardPoints();
             Destroy(gameObject);
+
+            // Check for levelManager being null before calling DecreaseBoxCount
+            if (levelManager != null)
+            {
+                levelManager.DecreaseBoxCount(true);
+            }
+            else
+            {
+                Debug.LogError("LevelManager reference is null when trying to decrease box count.");
+            }
         }
         else if (crateValue < 0)
         {
-            //Debug.Log("Crate value is below zero, deducting points and destroying crate.");
             DeductPoints();
             Destroy(gameObject);
         }
-        else
-        {
-            //Debug.Log("Crate value is still above zero, crate will continue falling.");
-        }
     }
+
 
 
     // Handle crate falling below the screen

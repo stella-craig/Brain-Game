@@ -20,9 +20,9 @@ public class CrateSpawner : MonoBehaviour
         camWidth = camHeight * Camera.main.aspect;
     }
 
-    public IEnumerator SpawnCrates(int crateCount)
+    public IEnumerator SpawnCrates()
     {
-        for (int i = 0; i < crateCount; i++)
+        while(true)
         {
             SpawnCrate();
             yield return new WaitForSeconds(spawnInterval);
@@ -37,9 +37,9 @@ public class CrateSpawner : MonoBehaviour
 
     public void SpawnCrate()
     {
-        Debug.Log("SpawnCrate called at game start", this);
+        //Debug.Log("SpawnCrate called at game start", this);
         float xPosition = Random.Range(-camWidth/2, camWidth/2);
-        Vector3 spawnPos = new Vector3(xPosition, (camHeight/2) + 1, 0);
+        Vector3 spawnPos = new Vector3(xPosition, 7.5f, 0);
 
         GameObject crate = Instantiate(cratePrefab, spawnPos, Quaternion.identity);
         crate.AddComponent<BoundsCheck>();
